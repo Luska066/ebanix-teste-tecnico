@@ -1,0 +1,20 @@
+version: '3'
+services:
+  hyperf-skeleton:
+    container_name: api-hyperf
+    image: hyperf-skeleton
+    build:
+      context: .
+    working_dir: /app
+    volumes:
+      - ./:/opt/www
+    ports:
+      - 9501:9501
+    environment:
+      - APP_ENV=dev
+      - SCAN_CACHEABLE=false
+    command: php /opt/www/bin/hyperf.php server:start
+
+networks:
+  default:
+    name: hyperf-skeleton

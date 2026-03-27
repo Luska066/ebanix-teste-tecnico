@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+
+  hyperf-skeleton:
+    container_name: hyperf-skeleton
+    image: hyperf/hyperf:8.0-alpine-v3.13-swoole
+    working_dir: /app
+    tty: true
+    restart: always
+    volumes:
+      - ./app:/app
+    ports:
+      - 9501:9501
+    command: php bin/hyperf.php server:start
+
+  redis-service:
+    container_name: redis-service
+    image: redis:7.0-alpine
+    ports:
+      - 6379:6379
+
+networks:
+  default:
+    driver: bridge
