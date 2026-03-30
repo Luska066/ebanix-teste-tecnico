@@ -32,7 +32,11 @@ class TransferUseCase
 
             if(empty($originAccount) == true || empty($destinationAccount) == true){
 
-                throw new Exception('',404);
+                return $response->withStatus(404)
+                    ->withHeader('Content-Type', 'application/json')
+                    ->withBody(
+                        new SwooleStream('0')
+                    );
             }
 
             $errors = $exceptionDispatcherHandler->dispatch();

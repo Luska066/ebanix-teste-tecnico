@@ -11,6 +11,6 @@ declare(strict_types=1);
  */
 use Hyperf\HttpServer\Router\Router;
 
-Router::get('/reset', 'App\Controller\IndexController@reset');
+Router::post('/reset', 'App\Controller\IndexController@reset');
 Router::get('/balance', 'App\Controller\IndexController@balance');
 Router::post('/event', 'App\Controller\IndexController@event');

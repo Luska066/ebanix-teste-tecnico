@@ -40,13 +40,13 @@ class DepositUseCase
                     $eventDeposit->account->balance->amount,
                 );
 
-                return $response->withStatus(200)
+                return $response->withStatus(201)
                     ->withHeader('Content-Type', 'application/json')
                     ->withBody(
                         new SwooleStream(json_encode([
                             "destination" => [
-                                "id" => $account['id'],
-                                "amount" => $account['amount']
+                                "id" => (string) $account['id'],
+                                "balance" => $account['amount']
                             ]
                         ]))
                     );
@@ -75,8 +75,8 @@ class DepositUseCase
                 ->withBody(
                     new SwooleStream(json_encode([
                         "destination" => [
-                            "id" => $account['id'],
-                            "amount" => $account['amount']
+                            "id" => (string) $account['id'],
+                            "balance" => $account['amount']
                         ]
                     ]))
                 );

@@ -27,7 +27,11 @@ class ConsultAccountBalanceUseCase
            $account = $accountRepository->findById($id->id);
 
            if(empty($account)){
-               throw new \Exception('Not found',404);
+               return $response->withStatus(404)
+                   ->withHeader('Content-Type', 'application/json')
+                   ->withBody(
+                       new SwooleStream('0')
+                   );
            }
 
            return $response->withStatus(200)

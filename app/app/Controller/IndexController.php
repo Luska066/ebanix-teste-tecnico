@@ -45,7 +45,11 @@ class IndexController extends AbstractController
         try{
             $redis = $this->container->get(AccountModelRedis::class);
             $redis->reset();
-            return $this->response->withStatus(200);
+            return $this->response->withStatus(200)
+                ->withHeader('Content-Type', 'application/json')
+                ->withBody(
+                    new SwooleStream('OK')
+                );
         }catch (\Exception $e){
             return $this->response->withStatus(500)
                 ->withBody(
@@ -59,7 +63,6 @@ class IndexController extends AbstractController
     public function balance(){
         $eventDipatcherHandler = new ExceptionDispatcherHandler();
         $consultAccountBalanceUseCase =  new ConsultAccountBalanceUseCase();
-
         $account_id = (int) $this->request->query('account_id');
         return $consultAccountBalanceUseCase->execute(
                 $this->response,
@@ -78,30 +81,31 @@ class IndexController extends AbstractController
 
 
         switch ($data['type']){
-
             case EventDeposit::TYPE:
+
                 $depositUseCase = new DepositUseCase();
                 return $depositUseCase->execute(
                     $this->response,
                     new ID(
-                        Arr::get($data,'destination',0),
+                        (int) Arr::get($data,'destination',0),
                         $eventDipatcherHandler,
                         'destination'
                     ),
                     new AMOUNT(
-                        Arr::get($data,'amount',0),
+                        (float) Arr::get($data,'amount',0),
                         $eventDipatcherHandler
                     ),
                     $eventDipatcherHandler
                 );
             case EventWithdraw::TYPE:
+
                 $withdrawUseCase = new WithdrawUseCase();
                 return $withdrawUseCase->execute(
                     $this->response,
                     new ID(
-                        Arr::get($data,'destination',0),
+                        (int) Arr::get($data,'origin',0),
                         $eventDipatcherHandler,
-                        'destination'
+                        'origin'
                     ),
                     new AMOUNT(
                         Arr::get($data,'amount',0),
@@ -110,6 +114,7 @@ class IndexController extends AbstractController
                     $eventDipatcherHandler
                 );
             case EventTransfer::TYPE:
+                
                 $transferUseCase = new TransferUseCase();
                 $origin = (int) Arr::get($data,'origin');
                 $destination = (int) Arr::get($data,'destination');

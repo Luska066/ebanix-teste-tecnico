@@ -63,7 +63,7 @@ class WithdrawUseCase
                 ->withBody(
                     new SwooleStream(json_encode([
                         "origin" => [
-                            "id" => $account['id'],
+                            "id" => (string) $account['id'],
                             "balance" => $account['amount']
                         ]
                     ]))
